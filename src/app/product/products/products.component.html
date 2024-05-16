@@ -1,1 +1,19 @@
-<p>products works!</p>
+<!-- <p>products work !</p> -->
+<!-- <div class="container" *ngIf="products$ | async as products"> -->
+<div class="container" *ngIf="products$ | async as products">
+    <p-dataView #dv [value]="products">
+        <ng-template pTemplate="header">
+            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+        </ng-template>
+        <ng-template pTemplate="listItem" let-product>
+            <!-- <div *ngFor="let product of products;"> -->
+            {{product.name}}
+            <!-- </div> -->
+        </ng-template>
+        <ng-template pTemplate="gridItem" let-product>
+            <!-- <div *ngFor="let product of products;"> -->
+            {{product.code}}
+            <!-- </div> -->
+        </ng-template>
+    </p-dataView>
+</div>
