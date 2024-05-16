@@ -3,16 +3,50 @@
 <div class="container" *ngIf="products$ | async as products">
     <p-dataView #dv [value]="products">
         <ng-template pTemplate="header">
+            <p-dropdown [options]="options" placeholder="Sort By Price" (onChange)="onSortChange($event)">
+            </p-dropdown>
             <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
         </ng-template>
         <ng-template pTemplate="listItem" let-product>
             <!-- <div *ngFor="let product of products;"> -->
-            {{product.name}}
+            <div [ngStyle]="{
+                'display': 'flex',
+                'flex-direction': 'row',
+                'justify-content': 'space-between',
+                'align-items': 'center'
+            }">
+                {{product.id}}
+                {{product.category}}
+                {{product.code}}
+                {{product.name}}
+                {{product.price}}
+                {{product.description}}
+                {{product.image}}
+                {{product.stock}}
+                {{product.date}}
+                {{product.active}}
+            </div>
             <!-- </div> -->
         </ng-template>
         <ng-template pTemplate="gridItem" let-product>
             <!-- <div *ngFor="let product of products;"> -->
-            {{product.code}}
+            <div [ngStyle]="{
+                'display': 'flex',
+                'flex-direction': 'column',
+                'justify-content': 'space-between',
+                'align-items': 'center'
+            }">
+                {{product.id}}
+                {{product.category}}
+                {{product.code}}
+                {{product.name}}
+                {{product.price}}
+                {{product.description}}
+                {{product.image}}
+                {{product.stock}}
+                {{product.date}}
+                {{product.active}}
+            </div>
             <!-- </div> -->
         </ng-template>
     </p-dataView>
