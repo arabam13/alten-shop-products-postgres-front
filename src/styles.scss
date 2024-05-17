@@ -430,3 +430,10 @@ app-footer {
     left: 0 !important;
   }
 }
+
+.p-dataview-grid > .p-dataview-content > .p-grid.p-nogutter.grid.grid-nogutter{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px 30px;
+  padding: 10px;
+}
