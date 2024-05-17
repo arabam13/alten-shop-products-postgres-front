@@ -1,6 +1,5 @@
-<!-- <p>products work !</p> -->
-<!-- <div class="container" *ngIf="products$ | async as products"> -->
 <div class="container" *ngIf="products$ | async as products">
+    <!-- <div> -->
     <p-dataView #dv [value]="products">
         <ng-template pTemplate="header">
             <div class="header-actions">
@@ -77,4 +76,10 @@
         </ng-template>
         <!-- </div> -->
     </p-dataView>
+    <!-- </div> -->
+
 </div>
+<p-paginator [rows]="productsPerPage" [totalRecords]="totalProducts$ | async" [showCurrentPageReport]="true"
+    [showPageLinks]="true" [showJumpToPageDropdown]="false"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowsPerPageOptions]="pageSizeOptions" (onPageChange)="handlePageSizeChange($event)"></p-paginator>

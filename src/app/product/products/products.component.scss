@@ -4,6 +4,7 @@
     color: black;
     margin-top: 100px;
     display: flex;
+    // flex-direction: column;
     justify-content: center;
     position: relative;
     left: 10%;
@@ -38,4 +39,12 @@ p-dataView{
 
 .input-wrapper input {
     padding-left: 30px;
+}
+
+p-paginator {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    left: 50%;
+    transform: translateX(-40%);
 }

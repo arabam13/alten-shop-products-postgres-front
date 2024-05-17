@@ -12,15 +12,25 @@ export class ProductService {
   get products$(): Observable<Product[]> {
     return this._products$.asObservable();
   }
+  private _totalProducts$ = new BehaviorSubject<number>(0);
+  get totalProducts$(): Observable<number> {
+    return this._totalProducts$.asObservable();
+  }
 
-  getProductsFromServer() {
+  getProductsFromServer(pageIndex: number, pageSize: number) {
     this.http
-      .get<Product[]>(`${environment.apiUrl}/products`)
+      .get<Product[]>(`${environment.apiUrl}/products`, {
+        params: {
+          _page: pageIndex.toString(),
+          _limit: pageSize.toString(),
+        },
+      })
       .pipe(
         // delay(1000),
-        tap((products) => {
+        tap((dataApi) => {
           //   this.lastCandidatesLoad = Date.now();
-          this._products$.next(products);
+          this._products$.next(dataApi["products"]);
+          this._totalProducts$.next(dataApi["totolPosts"]);
         })
       )
       .subscribe();
