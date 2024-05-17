@@ -4,8 +4,15 @@
     <p-dataView #dv [value]="products">
         <ng-template pTemplate="header">
             <div class="header-actions">
-                <p-dropdown [options]="options" placeholder="Sort By" (onChange)="onSortChange($event)">
-                </p-dropdown>
+                <div [ngStyle]="{'display':'flex', 'gap':'20px'}">
+                    <p-dropdown [options]="searchTypeOptions" placeholder="Sort By" [formControl]="searchTypeCtrl">
+                    </p-dropdown>
+                    <div class="input-wrapper">
+                        <i class="pi pi-search"></i>
+                        <input pInputText id="search" aria-describedby="search" placeholder="Search"
+                            [formControl]="searchCtrl" />
+                    </div>
+                </div>
                 <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
             </div>
         </ng-template>

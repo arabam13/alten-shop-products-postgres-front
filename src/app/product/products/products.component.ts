@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { FormBuilder, FormControl } from "@angular/forms";
+import { combineLatest, map, Observable, startWith } from "rxjs";
 import { ProductSearchType } from "../enums/product-search-type.enum";
 import { Product } from "../model/product.model";
 import { ProductService } from "../service/product.service";
@@ -10,32 +11,57 @@ import { ProductService } from "../service/product.service";
   styleUrls: ["./products.component.scss"],
 })
 export class ProductsComponent implements OnInit {
-  // products: Product[] = [];
   products$: Observable<Product[]>;
-  options!: {
+  searchCtrl!: FormControl;
+  searchTypeCtrl!: FormControl;
+  searchTypeOptions!: {
     value: ProductSearchType;
     label: string;
   }[];
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    this.options = [
-      { value: ProductSearchType.NAME, label: "Name" },
-      { value: ProductSearchType.CATEGORY, label: "Category" },
-    ];
+    this.initForm();
     this.initObservables();
     this.productService.getProductsFromServer();
     // this.products$.subscribe((products) => {
     //   console.log({ products });
-    //   this.products = products;
     // });
   }
 
-  private initObservables() {
-    this.products$ = this.productService.products$;
+  private initForm() {
+    this.searchCtrl = this.formBuilder.control("");
+    this.searchTypeCtrl = this.formBuilder.control(ProductSearchType.NAME);
+    this.searchTypeOptions = [
+      { value: ProductSearchType.NAME, label: "Name" },
+      { value: ProductSearchType.CATEGORY, label: "Category" },
+      { value: ProductSearchType.INVENTORYSTATUS, label: "Inventory Status" },
+    ];
   }
 
-  onSortChange(sort: string) {
-    // this.productService.sortProducts(sort);
+  private initObservables() {
+    // this.products$ = this.productService.products$;
+    const search$: Observable<string> = this.searchCtrl.valueChanges.pipe(
+      startWith(this.searchCtrl.value),
+      map((value) => value.toLowerCase())
+    );
+    const searchType$: Observable<ProductSearchType> =
+      this.searchTypeCtrl.valueChanges.pipe(
+        startWith(this.searchTypeCtrl.value)
+      );
+    this.products$ = combineLatest([
+      search$,
+      searchType$,
+      this.productService.products$,
+    ]).pipe(
+      map(([search, searchType, products]) =>
+        products.filter((product) =>
+          product[searchType].toLowerCase().includes(search)
+        )
+      )
+    );
   }
 }

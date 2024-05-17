@@ -12,10 +12,6 @@
 p-dataView{
     min-width:1000px;
     padding: 10px;
-
-    // .p-dataview-content{
-    //     background-color: yellowgreen;
-    // }
 }
 
 .header-actions{
@@ -25,26 +21,21 @@ p-dataView{
     margin-bottom: 10px;
 }
 
-.card-list-item{
+.card-list-item, .card-grid-item{
     padding-top:20px;
 }
 
-
-.card-grid-item{
-    padding-top:20px;
-    // display: flex;
+.input-wrapper {
+    position: relative;
 }
 
-.p-dataview-content > .p-grid.p-nogutter.grid.grid-nogutter{
-    background-color: cyan !important;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px 30px;
+.input-wrapper .pi-search {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-// .grid-column{
-//     background-color: cyan !important;
-//     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-//     gap: 30px 30px;
-// }
+.input-wrapper input {
+    padding-left: 30px;
+}

@@ -437,3 +437,15 @@ app-footer {
   gap: 30px 30px;
   padding: 10px;
 }
+
+.p-dataview-list > .p-dataview-content > .p-grid > .card{
+  margin-top:0;
+}
+
+#search{
+  width:255px;
+}
+
+p-dropdown > .p-dropdown.p-component{
+  width: 175px !important;
+}
