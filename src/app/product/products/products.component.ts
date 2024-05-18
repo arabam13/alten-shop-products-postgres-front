@@ -13,6 +13,7 @@ import { ProductService } from "../service/product.service";
 export class ProductsComponent implements OnInit {
   products$: Observable<Product[]>;
   totalProducts$!: Observable<number>;
+  productsPerPage$: Observable<number>;
 
   searchCtrl!: FormControl;
   searchTypeCtrl!: FormControl;
@@ -32,10 +33,7 @@ export class ProductsComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initObservables();
-    this.productService.getProductsFromServer(
-      this.currentPage,
-      this.productsPerPage
-    );
+    this.productService.getProductsFromServer();
     // this.products$.subscribe((products) => {
     //   console.log({ products });
     // });
@@ -75,18 +73,7 @@ export class ProductsComponent implements OnInit {
     this.totalProducts$ = this.productService.totalProducts$;
   }
 
-  handlePageSizeChange(event: {
-    page: number;
-    first: number;
-    rows: number;
-    pageCount: number;
-  }) {
-    // console.log({ event });
-    this.productsPerPage = event.rows;
-    this.currentPage = event.page + 1;
-    this.productService.getProductsFromServer(
-      this.currentPage,
-      this.productsPerPage
-    );
+  handlePageSizeChange(event: { page: number; rows: number }) {
+    this.productService.getProductsFromServer(event.page + 1, event.rows);
   }
 }

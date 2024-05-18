@@ -17,20 +17,19 @@ export class ProductService {
     return this._totalProducts$.asObservable();
   }
 
-  getProductsFromServer(pageIndex: number, pageSize: number) {
+  getProductsFromServer(pageIndex?: number, pageSize?: number) {
     this.http
       .get<Product[]>(`${environment.apiUrl}/products`, {
         params: {
-          _page: pageIndex.toString(),
-          _limit: pageSize.toString(),
+          _page: pageIndex?.toString(),
+          _limit: pageSize?.toString(),
         },
       })
       .pipe(
         // delay(1000),
         tap((dataApi) => {
-          //   this.lastCandidatesLoad = Date.now();
           this._products$.next(dataApi["products"]);
-          this._totalProducts$.next(dataApi["totolPosts"]);
+          this._totalProducts$.next(dataApi["totolProducts"]);
         })
       )
       .subscribe();
