@@ -1,12 +1,19 @@
-p{
+.container{
     font-weight: bold;
     font-size: 20px;
     color: black;
     margin-top: 100px;
     display: flex;
+    // flex-direction: column;
     justify-content: center;
-    align-items: center;
-    min-width: 800px;
-    position: fixed;
-    left: calc(100% - 70%);
+    position: relative;
+    left: 10%;
+}
+
+p-paginator {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    left: 50%;
+    transform: translateX(-40%);
 }

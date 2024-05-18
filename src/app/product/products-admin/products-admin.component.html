@@ -1,1 +1,164 @@
-<p>products-admin works!</p>
+<div class="container" *ngIf="products$ | async as products">
+    <!-- {{products | json}} -->
+    <div class="card">
+        <p-toast></p-toast>
+        <p-toolbar styleClass="mb-4 gap-2">
+            <ng-template pTemplate="left">
+                <!-- <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" (click)="openNew()" /> -->
+                <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2"></p-button>
+                <!-- <p-button pRipple severity="danger" label="Delete" icon="pi pi-trash" (click)="deleteSelectedProducts()"
+                    [disabled]="!selectedProducts || !selectedProducts.length" /> -->
+                <p-button pRipple severity="danger" label="Delete" icon="pi pi-trash"></p-button>
+            </ng-template>
+
+            <ng-template pTemplate="right">
+                <p-button pRipple icon="pi pi-cog"></p-button>
+            </ng-template>
+        </p-toolbar>
+
+        <p-table #dt [value]="products" styleClass="p-datatable-striped" [globalFilterFields]="['code', 'name']"
+            [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 4rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="code" style="min-width:15rem">
+                        Code <p-sortIcon field="code"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="name" style="min-width:17rem">
+                        Name <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th style="min-width:12rem">
+                        Actions
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <p-columnFilter type="text" field="code" [showClearButton]="false"></p-columnFilter>
+                    </th>
+                    <th>
+                        <p-columnFilter type="text" field="name" [showClearButton]="false"></p-columnFilter>
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                <tr [ngClass]="{'even-row': rowIndex % 2}">
+                    <td>
+                        <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                    </td>
+                    <td>
+                        {{ product.code }}
+                    </td>
+                    <td>
+                        {{ product.name }}
+                    </td>
+
+                    <td>
+                        <!-- <p-button pRipple icon="pi pi-pencil" class="mr-2" [rounded]="true" 
+                        [outlined]="true"
+                            severity="success" 
+                            (click)="editProduct(product)" /> -->
+                        <p-button pRipple icon="pi pi-pencil" class="mr-2 outlined-button"
+                            severity="success"></p-button>
+
+                        <p-button pRipple icon="pi pi-trash" severity="danger"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+            <!-- <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                    In total there are {{ products ? products.length : 0 }} products.
+                </div>
+            </ng-template> -->
+        </p-table>
+
+        <!-- <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true"
+            styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image"
+                    [alt]="product.image" class="block m-auto pb-3" *ngIf="product.image" />
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus />
+                    <small class="p-error" *ngIf="submitted && !product.name">
+                        Name is required.
+                    </small>
+                </div>
+                <div class="field">
+                    <label for="description">Description</label>
+                    <textarea id="description" pInputTextarea [(ngModel)]="product.description" required rows="3"
+                        cols="20">
+                        </textarea>
+                </div>
+
+                <div class="field">
+                    <label for="inventoryStatus">Inventory Status</label>
+                    <p-dropdown [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" [options]="statuses">
+                        <ng-template pTemplate="selectedItem">
+                            <p-tag [value]="product.inventoryStatus.toUpperCase()"
+                                [severity]="getSeverity(product.inventoryStatus.toUpperCase())" />
+                        </ng-template>
+                        <ng-template let-option pTemplate="item">
+                            <p-tag [value]="option.label" [severity]="getSeverity(option.label)" />
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div class="field">
+                    <label class="mb-3">Category</label>
+                    <div class="formgrid grid">
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category1" name="category" value="Accessories"
+                                [(ngModel)]="product.category" />
+                            <label for="category1">Accessories</label>
+                        </div>
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category2" name="category" value="Clothing"
+                                [(ngModel)]="product.category" />
+                            <label for="category2">Clothing</label>
+                        </div>
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category3" name="category" value="Electronics"
+                                [(ngModel)]="product.category" />
+                            <label for="category3">Electronics</label>
+                        </div>
+                        <div class="field-radiobutton col-6">
+                            <p-radioButton id="category4" name="category" value="Fitness"
+                                [(ngModel)]="product.category" />
+                            <label for="category4">Fitness</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="price">Price</label>
+                        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD"
+                            locale="en-US" />
+                    </div>
+                    <div class="field col">
+                        <label for="quantity">Quantity</label>
+                        <p-inputNumber id="quantity" [(ngModel)]="product.quantity" />
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <p-button pRipple label="Cancel" icon="pi pi-times" [text]="true" (click)="hideDialog()" />
+                <p-button pRipple label="Save" icon="pi pi-check" [text]="true" (click)="saveProduct()" />
+            </ng-template>
+        </p-dialog> -->
+
+        <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+    </div>
+
+</div>
+<p-paginator [rows]="productsPerPage$ | async" [totalRecords]="totalProducts$ | async" [showCurrentPageReport]="true"
+    [showPageLinks]="true" [showJumpToPageDropdown]="false"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowsPerPageOptions]="pageSizeOptions" (onPageChange)="handlePageSizeChange($event)"></p-paginator>

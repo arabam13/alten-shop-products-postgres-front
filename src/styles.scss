@@ -431,7 +431,7 @@ app-footer {
   }
 }
 
-.p-dataview-grid > .p-dataview-content > .p-grid.p-nogutter.grid.grid-nogutter{
+p-dataview > .p-dataview-grid > .p-dataview-content > .p-grid.p-nogutter.grid.grid-nogutter{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px 30px;
@@ -470,3 +470,6 @@ p-dropdown > .p-dropdown.p-component.p-paginator-rpp-options  {
   width: 70px !important;
 }
 
+p-table > .p-datatable > .p-datatable-wrapper > .p-datatable-table > .p-element.p-datatable-tbody > .even-row{
+  background-color: #f2f2f26c;
+}
