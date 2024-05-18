@@ -438,8 +438,24 @@ app-footer {
   padding: 10px;
 }
 
-.p-dataview-list > .p-dataview-content > .p-grid > .card{
+p-dataview > .p-dataview-list > .p-dataview-content > .p-grid > .card{
   margin-top:0;
+}
+
+p-dataview > .p-dataview-list > .p-dataview-content > .p-grid > .card > .p-element > .p-card.p-component{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  .p-card-header{
+    margin-left:90px;
+    width:110px;
+  }
+  .p-card-body{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+  }
 }
 
 #search{
@@ -453,3 +469,4 @@ p-dropdown > .p-dropdown.p-component{
 p-dropdown > .p-dropdown.p-component.p-paginator-rpp-options  {
   width: 70px !important;
 }
+
