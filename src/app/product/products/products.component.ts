@@ -71,9 +71,11 @@ export class ProductsComponent implements OnInit {
       )
     );
     this.totalProducts$ = this.productService.totalProducts$;
+    this.productsPerPage$ = this.productService.productsPerPage$;
   }
 
   handlePageSizeChange(event: { page: number; rows: number }) {
+    // console.log({ event });
     this.productService.getProductsFromServer(event.page + 1, event.rows);
   }
 }

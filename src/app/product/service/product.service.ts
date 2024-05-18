@@ -16,6 +16,10 @@ export class ProductService {
   get totalProducts$(): Observable<number> {
     return this._totalProducts$.asObservable();
   }
+  private _productsPerPage$ = new BehaviorSubject<number>(10);
+  get productsPerPage$(): Observable<number> {
+    return this._productsPerPage$.asObservable();
+  }
 
   getProductsFromServer(pageIndex?: number, pageSize?: number) {
     this.http
@@ -30,6 +34,7 @@ export class ProductService {
         tap((dataApi) => {
           this._products$.next(dataApi["products"]);
           this._totalProducts$.next(dataApi["totolProducts"]);
+          this._productsPerPage$.next(dataApi["pageSize"]);
         })
       )
       .subscribe();
