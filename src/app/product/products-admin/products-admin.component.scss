@@ -10,10 +10,19 @@
     left: 10%;
 }
 
-p-paginator {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    left: 50%;
-    transform: translateX(-40%);
+.card{
+    min-width:1000px;
+    padding: 10px;
 }
+
+p-paginator {
+    .p-paginator.p-component{
+        display: flex;
+        justify-content: center;
+        position: relative;
+        left: 50%;
+        transform: translateX(-32%);
+        width:652px;
+    }
+}
+

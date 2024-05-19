@@ -30,6 +30,7 @@ export class ProductsAdminComponent implements OnInit {
   private initObservables() {
     this.products$ = this.productService.products$;
     this.totalProducts$ = this.productService.totalProducts$;
+    this.productsPerPage$ = this.productService.productsPerPage$;
   }
 
   handlePageSizeChange(event: { page: number; rows: number }) {

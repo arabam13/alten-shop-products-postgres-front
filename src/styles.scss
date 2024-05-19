@@ -473,3 +473,17 @@ p-dropdown > .p-dropdown.p-component.p-paginator-rpp-options  {
 p-table > .p-datatable > .p-datatable-wrapper > .p-datatable-table > .p-element.p-datatable-tbody > .even-row{
   background-color: #f2f2f26c;
 }
+
+app-products-admin {
+  p-paginator {
+    .p-paginator.p-component{
+        display: flex;
+        justify-content: center;
+        position: relative;
+        left: 50%;
+        transform: translateX(-32%);
+        width:662px;
+    }
+  }
+}
+
