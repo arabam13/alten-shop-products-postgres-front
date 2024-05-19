@@ -26,3 +26,16 @@ p-paginator {
     }
 }
 
+.field{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.footer{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
