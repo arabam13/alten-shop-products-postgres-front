@@ -4,10 +4,8 @@
         <p-toast></p-toast>
         <p-toolbar styleClass="mb-4 gap-2">
             <ng-template pTemplate="left">
-                <!-- <p-button pRipple severity="success" label="New" icon="pi pi-plus" class="mr-2" (click)="openNew()" /> -->
                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()">
                 </button>
-
                 <!-- <p-button pRipple severity="danger" label="Delete" icon="pi pi-trash" (click)="deleteSelectedProducts()"
                     [disabled]="!selectedProducts || !selectedProducts.length" /> -->
                 <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-secondary"
@@ -66,7 +64,8 @@
                         [outlined]="true"
                             severity="success" 
                             (click)="editProduct(product)" /> -->
-                        <button pButton pRipple icon="pi pi-pencil" class="p-button-info mr-2 p-button-text">
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-info mr-2 p-button-text"
+                            (click)="editProduct(product)">
                         </button>
 
                         <button pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2 p-button-text">
@@ -87,7 +86,10 @@
 
                 <div class="field">
                     <label for="description">Code</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="product.code" required autofocus />
+                    <input type="text" pInputText id="code" [(ngModel)]="product.code" required autofocus />
+                    <small class="p-error" *ngIf="submitted && !product.code">
+                        Code is required.
+                    </small>
                 </div>
                 <div class="field">
                     <label for="name">Name</label>
@@ -104,7 +106,7 @@
                         (click)="hideDialog()">
                     </button>
                     <button pButton pRipple label="Cancel" label="Save" icon="pi pi-check"
-                        class="p-button-success p-button-text" (click)="saveProduct()">
+                        class="p-button-success p-button-text" (click)="saveProduct(product)">
                     </button>
                 </div>
             </ng-template>

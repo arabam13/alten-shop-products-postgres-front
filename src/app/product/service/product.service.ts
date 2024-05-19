@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "app/environments/environment";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, map, Observable, switchMap, take, tap } from "rxjs";
 import { Product } from "../model/product.model";
 
 @Injectable()
@@ -36,6 +36,32 @@ export class ProductService {
           this._totalProducts$.next(dataApi["totolProducts"]);
           this._productsPerPage$.next(dataApi["pageSize"]);
         })
+      )
+      .subscribe();
+  }
+
+  updateProductFromServer(productARG: Pick<Product, "name" | "code">): void {
+    this.products$
+      .pipe(
+        take(1),
+        map((products) =>
+          products.map((product) =>
+            product.code === productARG.code
+              ? { ...product, code: productARG.code, name: productARG.name }
+              : product
+          )
+        ),
+        tap((updatedProducts) => this._products$.next(updatedProducts)),
+        switchMap((updatedProducts) =>
+          this.http.patch(
+            `${environment.apiUrl}/products/${
+              updatedProducts.find(
+                (product) => product.code === productARG.code
+              ).id
+            }`,
+            productARG
+          )
+        )
       )
       .subscribe();
   }
