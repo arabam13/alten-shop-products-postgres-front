@@ -84,5 +84,5 @@
     <p-paginator [rows]="productsPerPage$ | async" [totalRecords]="totalProducts$ | async"
         [showCurrentPageReport]="true" [showPageLinks]="true" [showJumpToPageDropdown]="false"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="pageSizeOptions" (onPageChange)="handlePageSizeChange($event)"></p-paginator>
+        [rowsPerPageOptions]="pageSizeOptions$ | async" (onPageChange)="handlePageSizeChange($event)"></p-paginator>
 </ng-template>

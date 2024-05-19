@@ -15,8 +15,8 @@ export class ProductsAdminComponent implements OnInit {
   products$: Observable<Product[]>;
   totalProducts$: Observable<number>;
   productsPerPage$: Observable<number>;
+  pageSizeOptions$!: Observable<number[]>;
 
-  pageSizeOptions = [10, 20, 30];
   productDialog: boolean = false;
   product: Pick<Product, "id" | "name" | "code">;
   selectedProducts!: Product[] | null;
@@ -39,6 +39,7 @@ export class ProductsAdminComponent implements OnInit {
     this.products$ = this.productFacade.products$;
     this.totalProducts$ = this.productFacade.totalProducts$;
     this.productsPerPage$ = this.productFacade.productsPerPage$;
+    this.pageSizeOptions$ = this.productFacade.pageSizeOptions$;
   }
 
   handlePageSizeChange(event: { page: number; rows: number }) {

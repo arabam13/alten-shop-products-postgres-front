@@ -30,6 +30,10 @@ export class ProductFacadeService {
   get productsPerPage$(): Observable<number> {
     return this._productsPerPage$.asObservable();
   }
+  private _pageSizeOptions$ = new BehaviorSubject<number[]>([10, 25, 50]);
+  get pageSizeOptions$(): Observable<number[]> {
+    return this._pageSizeOptions$.asObservable();
+  }
 
   constructor(private productService: ProductService) {}
 

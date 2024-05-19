@@ -15,6 +15,7 @@ export class ProductsComponent implements OnInit {
   products$: Observable<Product[]>;
   totalProducts$!: Observable<number>;
   productsPerPage$: Observable<number>;
+  pageSizeOptions$!: Observable<number[]>;
 
   searchCtrl!: FormControl;
   searchTypeCtrl!: FormControl;
@@ -23,9 +24,6 @@ export class ProductsComponent implements OnInit {
     label: string;
   }[];
 
-  // currentPage = 1;
-  // productsPerPage = 10;
-  pageSizeOptions = [10, 20, 30];
   constructor(
     private productFacade: ProductFacadeService,
     private formBuilder: FormBuilder
@@ -51,6 +49,7 @@ export class ProductsComponent implements OnInit {
     this.loading$ = this.productFacade.loading$;
     this.totalProducts$ = this.productFacade.totalProducts$;
     this.productsPerPage$ = this.productFacade.productsPerPage$;
+    this.pageSizeOptions$ = this.productFacade.pageSizeOptions$;
     // this.products$ = this.productService.products$;
     const search$: Observable<string> = this.searchCtrl.valueChanges.pipe(
       startWith(this.searchCtrl.value),
