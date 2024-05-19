@@ -82,7 +82,10 @@ export class ProductsAdminComponent implements OnInit {
         });
         return;
       }
-      this.productService.addProductFromServer(product);
+      this.productService.addProductFromServer({
+        code: product.code,
+        name: product.name,
+      });
       this.messageService.add({
         severity: "success",
         summary: "Successful",
@@ -112,6 +115,26 @@ export class ProductsAdminComponent implements OnInit {
           severity: "success",
           summary: "Successful",
           detail: "Product Deleted",
+          life: 3000,
+        });
+      },
+    });
+  }
+
+  deleteSelectedProducts() {
+    this.confirmationService.confirm({
+      message: "Are you sure you want to delete the selected products?",
+      header: "Confirm",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.selectedProducts.map((product) =>
+          this.productService.deleteProductFromServer(product)
+        );
+        this.selectedProducts = null;
+        this.messageService.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Products Deleted",
           life: 3000,
         });
       },
