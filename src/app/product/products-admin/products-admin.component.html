@@ -60,24 +60,16 @@
                     </td>
 
                     <td>
-                        <!-- <p-button pRipple icon="pi pi-pencil" class="mr-2" [rounded]="true" 
-                        [outlined]="true"
-                            severity="success" 
-                            (click)="editProduct(product)" /> -->
                         <button pButton pRipple icon="pi pi-pencil" class="p-button-info mr-2 p-button-text"
                             (click)="editProduct(product)">
                         </button>
 
-                        <button pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2 p-button-text">
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2 p-button-text"
+                            (click)="deleteProduct(product)">
                         </button>
                     </td>
                 </tr>
             </ng-template>
-            <!-- <ng-template pTemplate="summary">
-                <div class="flex align-items-center justify-content-between">
-                    In total there are {{ products ? products.length : 0 }} products.
-                </div>
-            </ng-template> -->
         </p-table>
 
         <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true"

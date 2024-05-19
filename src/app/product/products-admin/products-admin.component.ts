@@ -14,14 +14,11 @@ export class ProductsAdminComponent implements OnInit {
   products$: Observable<Product[]>;
   totalProducts$: Observable<number>;
   productsPerPage$: Observable<number>;
-  product$: Observable<Product>;
 
   pageSizeOptions = [10, 20, 30];
   productDialog: boolean = false;
-  products!: Product[];
   product: Pick<Product, "id" | "name" | "code">;
   selectedProducts!: Product[] | null;
-
   submitted: boolean = false;
   mode: "add" | "edit" = "add";
 
@@ -85,7 +82,7 @@ export class ProductsAdminComponent implements OnInit {
         });
         return;
       }
-      this.productService.addProductToServer(product);
+      this.productService.addProductFromServer(product);
       this.messageService.add({
         severity: "success",
         summary: "Successful",
@@ -96,10 +93,28 @@ export class ProductsAdminComponent implements OnInit {
 
     this.productDialog = false;
   }
+
   editProduct(product: Product) {
     // console.log({ product });
     this.mode = "edit";
     this.product = { id: product.id, name: product.name, code: product.code };
     this.productDialog = true;
+  }
+
+  deleteProduct(product: Product) {
+    this.confirmationService.confirm({
+      message: "Are you sure you want to delete " + product.name + "?",
+      header: "Confirm",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.productService.deleteProductFromServer(product);
+        this.messageService.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Product Deleted",
+          life: 3000,
+        });
+      },
+    });
   }
 }

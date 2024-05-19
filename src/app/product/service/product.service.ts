@@ -64,7 +64,9 @@ export class ProductService {
       .subscribe();
   }
 
-  addProductToServer(productARG: Pick<Product, "id" | "name" | "code">): void {
+  addProductFromServer(
+    productARG: Pick<Product, "id" | "name" | "code">
+  ): void {
     // console.log({ productARG });
     this.http
       .post<Product>(`${environment.apiUrl}/products`, {
@@ -78,5 +80,37 @@ export class ProductService {
         })
       )
       .subscribe();
+  }
+
+  deleteProductFromServer(productARG: Pick<Product, "id">): void {
+    this.http
+      .delete(`${environment.apiUrl}/products/${productARG.id}`)
+      .pipe(
+        switchMap(() => this.products$),
+        take(1),
+        map((products) =>
+          products.filter((product) => product.id !== productARG.id)
+        ),
+        tap((newProducts) => {
+          this._products$.next(newProducts);
+          this._totalProducts$.next(this._totalProducts$.value - 1);
+        })
+      )
+      .subscribe();
+    // this.products$
+    //   .pipe(
+    //     take(1),
+    //     map((products) =>
+    //       products.filter((product) => product.id !== productARG.id)
+    //     ),
+    //     tap((updatedProducts) => {
+    //       this._products$.next(updatedProducts);
+    //       this._totalProducts$.next(this._totalProducts$.value - 1);
+    //     }),
+    //     switchMap(() =>
+    //       this.http.delete(`${environment.apiUrl}/products/${productARG.id}`)
+    //     )
+    //   )
+    //   .subscribe();
   }
 }
