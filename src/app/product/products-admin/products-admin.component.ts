@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Observable } from "rxjs";
 import { Product } from "../model/product.model";
@@ -20,16 +19,16 @@ export class ProductsAdminComponent implements OnInit {
   pageSizeOptions = [10, 20, 30];
   productDialog: boolean = false;
   products!: Product[];
-  product: Pick<Product, "name" | "code"> = { name: "", code: "" };
+  product: Pick<Product, "id" | "name" | "code">;
   selectedProducts!: Product[] | null;
 
   submitted: boolean = false;
+  mode: "add" | "edit" = "add";
 
   constructor(
     private productService: ProductService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService,
-    private route: ActivatedRoute
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +48,8 @@ export class ProductsAdminComponent implements OnInit {
   }
 
   openNew() {
-    this.product = { name: "", code: "" };
+    this.mode = "add";
+    this.product = { id: 0, name: "", code: "" };
     this.submitted = false;
     this.productDialog = true;
   }
@@ -59,23 +59,33 @@ export class ProductsAdminComponent implements OnInit {
     this.submitted = false;
   }
 
-  saveProduct(product: Pick<Product, "name" | "code">) {
-    // console.log({ product });
+  saveProduct(product: Pick<Product, "id" | "name" | "code">) {
     this.submitted = true;
 
-    if (product.name?.trim() && product.code?.trim()) {
-      // this.products[this.findIndexById(this.product.id)] = this.product;
+    if (product.name?.trim() && product.code?.trim() && this.mode !== "add") {
+      this.mode = "edit";
       this.productService.updateProductFromServer(product);
       this.messageService.add({
-        severity: "success",
+        severity: "info",
         summary: "Successful",
         detail: "Product Updated",
         life: 3000,
       });
     } else {
-      // this.product.id = this.createId();
-      // this.product.image = "product-placeholder.svg";
-      // this.products.push(this.product);
+      this.mode = "add";
+      if (
+        (!product.name && this.submitted) ||
+        (!product.code && this.submitted)
+      ) {
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Name or Code are required",
+          life: 3000,
+        });
+        return;
+      }
+      this.productService.addProductToServer(product);
       this.messageService.add({
         severity: "success",
         summary: "Successful",
@@ -84,14 +94,12 @@ export class ProductsAdminComponent implements OnInit {
       });
     }
 
-    // this.products = [...this.products];
     this.productDialog = false;
-    // this.product = { name: "", code: "" };
   }
   editProduct(product: Product) {
     // console.log({ product });
-    this.product = { name: product.name, code: product.code };
-
+    this.mode = "edit";
+    this.product = { id: product.id, name: product.name, code: product.code };
     this.productDialog = true;
   }
 }

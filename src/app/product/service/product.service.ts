@@ -40,28 +40,42 @@ export class ProductService {
       .subscribe();
   }
 
-  updateProductFromServer(productARG: Pick<Product, "name" | "code">): void {
+  updateProductFromServer(
+    productARG: Pick<Product, "id" | "name" | "code">
+  ): void {
     this.products$
       .pipe(
         take(1),
         map((products) =>
           products.map((product) =>
-            product.code === productARG.code
+            product.id === productARG.id
               ? { ...product, code: productARG.code, name: productARG.name }
               : product
           )
         ),
         tap((updatedProducts) => this._products$.next(updatedProducts)),
-        switchMap((updatedProducts) =>
-          this.http.patch(
-            `${environment.apiUrl}/products/${
-              updatedProducts.find(
-                (product) => product.code === productARG.code
-              ).id
-            }`,
-            productARG
-          )
+        switchMap(() =>
+          this.http.patch(`${environment.apiUrl}/products/${productARG.id}`, {
+            code: productARG.code,
+            name: productARG.name,
+          })
         )
+      )
+      .subscribe();
+  }
+
+  addProductToServer(productARG: Pick<Product, "id" | "name" | "code">): void {
+    // console.log({ productARG });
+    this.http
+      .post<Product>(`${environment.apiUrl}/products`, {
+        code: productARG.code,
+        name: productARG.name,
+      })
+      .pipe(
+        tap((product) => {
+          this._products$.next([product, ...this._products$.value]);
+          this._totalProducts$.next(this._totalProducts$.value + 1);
+        })
       )
       .subscribe();
   }
