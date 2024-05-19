@@ -1,5 +1,5 @@
 <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"
-    *ngIf="loading$|async; else dataViewList"
+    *ngIf="loading$ | async; else dataViewList"
     [ngStyle]="{'position':'absolute', 'top':'25%', 'left':'50%'}"></p-progressSpinner>
 <ng-template #dataViewList>
     <div class="container" *ngIf="products$ | async as products">

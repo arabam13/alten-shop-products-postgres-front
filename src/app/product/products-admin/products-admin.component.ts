@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Observable } from "rxjs";
+import { ProductFacadeService } from "../facade/product-facade.service";
 import { Product } from "../model/product.model";
-import { ProductService } from "../service/product.service";
 
 @Component({
   selector: "app-products-admin",
@@ -24,26 +24,26 @@ export class ProductsAdminComponent implements OnInit {
   mode: "add" | "edit" = "add";
 
   constructor(
-    private productService: ProductService,
+    private productFacade: ProductFacadeService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.initObservables();
-    this.productService.getProductsFromServer();
+    this.productFacade.getProducts();
   }
 
   private initObservables() {
-    this.loading$ = this.productService.loading$;
-    this.products$ = this.productService.products$;
-    this.totalProducts$ = this.productService.totalProducts$;
-    this.productsPerPage$ = this.productService.productsPerPage$;
+    this.loading$ = this.productFacade.loading$;
+    this.products$ = this.productFacade.products$;
+    this.totalProducts$ = this.productFacade.totalProducts$;
+    this.productsPerPage$ = this.productFacade.productsPerPage$;
   }
 
   handlePageSizeChange(event: { page: number; rows: number }) {
     // console.log({ event });
-    this.productService.getProductsFromServer(event.page + 1, event.rows);
+    this.productFacade.getProducts(event.page + 1, event.rows);
   }
 
   openNew() {
@@ -63,7 +63,7 @@ export class ProductsAdminComponent implements OnInit {
 
     if (product.name?.trim() && product.code?.trim() && this.mode !== "add") {
       this.mode = "edit";
-      this.productService.updateProductFromServer(product);
+      this.productFacade.updateProduct(product);
       this.messageService.add({
         severity: "info",
         summary: "Successful",
@@ -84,7 +84,7 @@ export class ProductsAdminComponent implements OnInit {
         });
         return;
       }
-      this.productService.addProductFromServer({
+      this.productFacade.addProduct({
         code: product.code,
         name: product.name,
       });
@@ -112,7 +112,7 @@ export class ProductsAdminComponent implements OnInit {
       header: "Confirm",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        this.productService.deleteProductFromServer(product);
+        this.productFacade.deleteProduct(product);
         this.messageService.add({
           severity: "success",
           summary: "Successful",
@@ -130,7 +130,7 @@ export class ProductsAdminComponent implements OnInit {
       icon: "pi pi-exclamation-triangle",
       accept: () => {
         this.selectedProducts.map((product) =>
-          this.productService.deleteProductFromServer(product)
+          this.productFacade.deleteProduct(product)
         );
         this.selectedProducts = null;
         this.messageService.add({

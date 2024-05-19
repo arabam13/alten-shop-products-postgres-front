@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { combineLatest, map, Observable, startWith } from "rxjs";
 import { ProductSearchType } from "../enums/product-search-type.enum";
+import { ProductFacadeService } from "../facade/product-facade.service";
 import { Product } from "../model/product.model";
-import { ProductService } from "../service/product.service";
 
 @Component({
   selector: "app-products",
@@ -27,14 +27,14 @@ export class ProductsComponent implements OnInit {
   // productsPerPage = 10;
   pageSizeOptions = [10, 20, 30];
   constructor(
-    private productService: ProductService,
+    private productFacade: ProductFacadeService,
     private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.initObservables();
-    this.productService.getProductsFromServer();
+    this.productFacade.getProducts();
   }
 
   private initForm() {
@@ -48,9 +48,9 @@ export class ProductsComponent implements OnInit {
   }
 
   private initObservables() {
-    this.loading$ = this.productService.loading$;
-    this.totalProducts$ = this.productService.totalProducts$;
-    this.productsPerPage$ = this.productService.productsPerPage$;
+    this.loading$ = this.productFacade.loading$;
+    this.totalProducts$ = this.productFacade.totalProducts$;
+    this.productsPerPage$ = this.productFacade.productsPerPage$;
     // this.products$ = this.productService.products$;
     const search$: Observable<string> = this.searchCtrl.valueChanges.pipe(
       startWith(this.searchCtrl.value),
@@ -63,7 +63,7 @@ export class ProductsComponent implements OnInit {
     this.products$ = combineLatest([
       search$,
       searchType$,
-      this.productService.products$,
+      this.productFacade.products$,
     ]).pipe(
       map(([search, searchType, products]) =>
         products.filter((product) =>
@@ -75,6 +75,6 @@ export class ProductsComponent implements OnInit {
 
   handlePageSizeChange(event: { page: number; rows: number }) {
     // console.log({ event });
-    this.productService.getProductsFromServer(event.page + 1, event.rows);
+    this.productFacade.getProducts(event.page + 1, event.rows);
   }
 }
