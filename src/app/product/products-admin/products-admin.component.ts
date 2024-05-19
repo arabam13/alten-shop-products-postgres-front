@@ -11,6 +11,7 @@ import { ProductService } from "../service/product.service";
   providers: [ConfirmationService],
 })
 export class ProductsAdminComponent implements OnInit {
+  loading$!: Observable<boolean>;
   products$: Observable<Product[]>;
   totalProducts$: Observable<number>;
   productsPerPage$: Observable<number>;
@@ -34,6 +35,7 @@ export class ProductsAdminComponent implements OnInit {
   }
 
   private initObservables() {
+    this.loading$ = this.productService.loading$;
     this.products$ = this.productService.products$;
     this.totalProducts$ = this.productService.totalProducts$;
     this.productsPerPage$ = this.productService.productsPerPage$;

@@ -1,13 +1,26 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "app/environments/environment";
-import { BehaviorSubject, map, Observable, switchMap, take, tap } from "rxjs";
+import {
+  BehaviorSubject,
+  delay,
+  map,
+  Observable,
+  switchMap,
+  take,
+  tap,
+} from "rxjs";
 import { Product } from "../model/product.model";
 
 @Injectable()
 export class ProductService {
   constructor(private http: HttpClient) {}
 
+  //observables
+  private _loading$ = new BehaviorSubject<boolean>(false);
+  get loading$(): Observable<boolean> {
+    return this._loading$.asObservable();
+  }
   private _products$ = new BehaviorSubject<Product[]>([]);
   get products$(): Observable<Product[]> {
     return this._products$.asObservable();
@@ -21,7 +34,14 @@ export class ProductService {
     return this._productsPerPage$.asObservable();
   }
 
+  private setLoadingStatus(loading: boolean) {
+    this._loading$.next(loading);
+  }
+
   getProductsFromServer(pageIndex?: number, pageSize?: number) {
+    if (!pageIndex && !pageSize) {
+      this.setLoadingStatus(true);
+    }
     this.http
       .get<Product[]>(`${environment.apiUrl}/products`, {
         params: {
@@ -30,11 +50,12 @@ export class ProductService {
         },
       })
       .pipe(
-        // delay(1000),
+        delay(200),
         tap((dataApi) => {
           this._products$.next(dataApi["products"]);
           this._totalProducts$.next(dataApi["totolProducts"]);
           this._productsPerPage$.next(dataApi["pageSize"]);
+          this.setLoadingStatus(false);
         })
       )
       .subscribe();
@@ -66,6 +87,7 @@ export class ProductService {
 
   addProductFromServer(productARG: Pick<Product, "name" | "code">): void {
     // console.log({ productARG });
+    // this.setLoadingStatus(true);
     this.http
       .post<Product>(`${environment.apiUrl}/products`, {
         code: productARG.code,
@@ -75,12 +97,14 @@ export class ProductService {
         tap((product) => {
           this._products$.next([product, ...this._products$.value]);
           this._totalProducts$.next(this._totalProducts$.value + 1);
+          // this.setLoadingStatus(false);
         })
       )
       .subscribe();
   }
 
   deleteProductFromServer(productARG: Product): void {
+    this.setLoadingStatus(true);
     this.http
       .delete(`${environment.apiUrl}/products/${productARG.id}`)
       .pipe(
@@ -92,6 +116,7 @@ export class ProductService {
         tap((newProducts) => {
           this._products$.next(newProducts);
           this._totalProducts$.next(this._totalProducts$.value - 1);
+          this.setLoadingStatus(false);
         })
       )
       .subscribe();

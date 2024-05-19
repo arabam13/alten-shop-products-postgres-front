@@ -11,6 +11,7 @@ import { ProductService } from "../service/product.service";
   styleUrls: ["./products.component.scss"],
 })
 export class ProductsComponent implements OnInit {
+  loading$!: Observable<boolean>;
   products$: Observable<Product[]>;
   totalProducts$!: Observable<number>;
   productsPerPage$: Observable<number>;
@@ -22,8 +23,8 @@ export class ProductsComponent implements OnInit {
     label: string;
   }[];
 
-  currentPage = 1;
-  productsPerPage = 10;
+  // currentPage = 1;
+  // productsPerPage = 10;
   pageSizeOptions = [10, 20, 30];
   constructor(
     private productService: ProductService,
@@ -34,9 +35,6 @@ export class ProductsComponent implements OnInit {
     this.initForm();
     this.initObservables();
     this.productService.getProductsFromServer();
-    // this.products$.subscribe((products) => {
-    //   console.log({ products });
-    // });
   }
 
   private initForm() {
@@ -50,6 +48,9 @@ export class ProductsComponent implements OnInit {
   }
 
   private initObservables() {
+    this.loading$ = this.productService.loading$;
+    this.totalProducts$ = this.productService.totalProducts$;
+    this.productsPerPage$ = this.productService.productsPerPage$;
     // this.products$ = this.productService.products$;
     const search$: Observable<string> = this.searchCtrl.valueChanges.pipe(
       startWith(this.searchCtrl.value),
@@ -70,8 +71,6 @@ export class ProductsComponent implements OnInit {
         )
       )
     );
-    this.totalProducts$ = this.productService.totalProducts$;
-    this.productsPerPage$ = this.productService.productsPerPage$;
   }
 
   handlePageSizeChange(event: { page: number; rows: number }) {
