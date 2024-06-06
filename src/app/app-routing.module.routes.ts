@@ -7,10 +7,10 @@ const routes: Routes = [
     loadChildren: () =>
       import("./product/product.module").then((m) => m.ProductModule),
   },
-  {
-    path: "**",
-    redirectTo: "/products",
-  },
+  // {
+  //   path: "**",
+  //   redirectTo: "/products",
+  // },
 ];
 
 @NgModule({
