@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { combineLatest, map, Observable, startWith } from "rxjs";
 import { ProductSearchType } from "../enums/product-search-type.enum";
@@ -9,6 +9,7 @@ import { Product } from "../model/product.model";
   selector: "app-products",
   templateUrl: "./products.component.html",
   styleUrls: ["./products.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent implements OnInit {
   loading$!: Observable<boolean>;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { Observable } from "rxjs";
 import { ProductFacadeService } from "../facade/product-facade.service";
@@ -9,6 +9,7 @@ import { Product } from "../model/product.model";
   templateUrl: "./products-admin.component.html",
   styleUrls: ["./products-admin.component.scss"],
   providers: [ConfirmationService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsAdminComponent implements OnInit {
   loading$!: Observable<boolean>;
